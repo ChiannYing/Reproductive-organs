@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey Through the Body</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .game-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .output {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Journey Through the Body</h1>
+    <p>Welcome, Explorer! Your mission is to learn about the human reproductive system. Make choices and answer questions to collect Knowledge Gems!</p>
+    <div id="game-content">
+      <p>Choose your path:</p>
+      <button onclick="startGame('male')">Enter the Male Reproductive System</button>
+      <button onclick="startGame('female')">Enter the Female Reproductive System</button>
+    </div>
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    let knowledgeGems = 0;
+
+    function startGame(system) {
+      let html = '';
+      if (system === 'male') {
+        html = `
+          <p>You enter the male reproductive system. The first organ you see is the <strong>testes</strong>.</p>
+          <p><strong>Question 1:</strong> What is the main function of the testes?</p>
+          <button onclick="answerQuestion('male', 1, 2)">1. Produce urine</button>
+          <button onclick="answerQuestion('male', 1, 2)">2. Produce sperm and testosterone</button>
+        `;
+      } else if (system === 'female') {
+        html = `
+          <p>You enter the female reproductive system. The first organ you see is the <strong>ovaries</strong>.</p>
+          <p><strong>Question 1:</strong> What do the ovaries produce?</p>
+          <button onclick="answerQuestion('female', 1, 1)">1. Eggs and hormones</button>
+          <button onclick="answerQuestion('female', 1, 2)">2. Sperm</button>
+        `;
+      }
+      document.getElementById('game-content').innerHTML = html;
+    }
+
+    function answerQuestion(system, questionNumber, correctAnswer) {
+      const userAnswer = event.target.textContent.split('.')[0].trim();
+      const output = document.getElementById('output');
+      if (userAnswer == correctAnswer) {
+        knowledgeGems++;
+        output.innerHTML = `<p>Correct! You earned a <strong>Knowledge Gem</strong>! Total Gems: ${knowledgeGems}</p>`;
+        if (system === 'male') {
+          if (questionNumber === 1) {
+            document.getElementById('game-content').innerHTML = `
+              <p>Next organ: <strong>vas deferens</strong>, a tube that carries sperm.</p>
+              <p><strong>Question 2:</strong> What does the vas deferens do?</p>
+              <button onclick="answerQuestion('male', 2, 2)">1. Carry urine</button>
+              <button onclick="answerQuestion('male', 2, 2)">2. Transport sperm</button>
+            `;
+          } else if (questionNumber === 2) {
+            endGame();
+          }
+        } else if (system === 'female') {
+          if (questionNumber === 1) {
+            document.getElementById('game-content').innerHTML = `
+              <p>Next organ: <strong>fallopian tubes</strong>, where fertilization occurs.</p>
+              <p><strong>Question 2:</strong> What happens in the fallopian tubes?</p>
+              <button onclick="answerQuestion('female', 2, 1)">1. Eggs are fertilized by sperm</button>
+              <button onclick="answerQuestion('female', 2, 1)">2. Urine is stored</button>
+            `;
+          } else if (questionNumber === 2) {
+            endGame();
+          }
+        }
+      } else {
+        output.innerHTML = `<p>Incorrect. Try again!</p>`;
+      }
+    }
+
+    function endGame() {
+      if (knowledgeGems === 2) {
+        document.getElementById('game-content').innerHTML = `
+          <p>Congratulations! You've collected all <strong>Knowledge Gems</strong> and completed your journey!</p>
+          <button onclick="location.reload()">Play Again</button>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
